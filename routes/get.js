@@ -1,5 +1,10 @@
-module.exports = function(app) {
-    app.get('/test', function(request, response) {
-        response.send('Test worked!')
-    })
-}
+module.exports = function(app, api) {
+    app.get('/', function(request, response) {
+        api.getAllPosts()
+            .then(posts => {
+                response.render('partial/posts', {
+                    posts: posts
+                });
+            });
+    });
+};

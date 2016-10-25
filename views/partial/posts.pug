@@ -1,14 +1,10 @@
-extends header
-    block title
-        title plebisite - the front-page of localhost
-    block content
-        each post in posts
-            div(id="contents")
-                h1 List of contents
-                ul(class="contents-list")
+extends ../layout/header
+block content
+        div(id="contents")
+            ul(class="contents-list")
                 each post in posts
-                    a.article(href=post.url)
+                    a.post(href=post.url)
                         li= post.title
                     p submitted by #{post.user.username}
-                ul
-            div
+            ul
+        div

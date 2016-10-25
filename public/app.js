@@ -21,7 +21,7 @@ var morgan = require('morgan');
  **/
 var redditAPI = reddit(knex);
 var app = express();
-require('../routes/_routes.js')(app);
+require('../routes/_routes.js')(app, redditAPI);
 app.listen(process.env.PORT, function() {
     var port = process.env.PORT || 3000;
     if (process.env.C9_HOSTNAME) {
@@ -37,6 +37,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use(morgan('dev'));
+app.use(express.static('public'));
 
 /*
  * API
