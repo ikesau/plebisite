@@ -1,7 +1,7 @@
 {
   "name": "reddit-clone",
   "version": "1.0.0",
-  "main": "public/index.js",
+  "main": "public/app.js",
   "repository": {
     "url": "git@github.com:ikesaunders/reddit-clone.git",
     "type": "git"
@@ -10,8 +10,11 @@
   "license": "MIT",
   "dependencies": {
     "bcrypt-as-promised": "^1.1.0",
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
     "knex": "^0.12.6",
+    "morgan": "^1.7.0",
     "mysql": "^2.11.1",
     "pug": "^2.0.0-beta6",
     "yarn": "^0.16.1"

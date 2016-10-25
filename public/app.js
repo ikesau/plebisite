@@ -1,3 +1,6 @@
+/*
+ * Dependencies
+ **/
 var knex = require('knex')({
     client: 'mysql',
     connection: {
@@ -7,27 +10,37 @@ var knex = require('knex')({
         database: 'reddit'
     }
 });
-
-// load our API and pass it the connection
 var reddit = require('../lib/reddit');
+var express = require('express');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var morgan = require('morgan');
+
+/*
+ * Initialization
+ **/
 var redditAPI = reddit(knex);
-
-
+var app = express();
+require('../routes/_routes.js')(app);
+app.listen(process.env.PORT, function() {
+    var port = process.env.PORT || 3000;
+    if (process.env.C9_HOSTNAME) {
+        console.log('Web server is listening on https://' + process.env.C9_HOSTNAME);
+    }
+    else {
+        console.log('Web server is listening on http://localhost:' + port);
+    }
+});
+app.set('view engine', 'pug');
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+app.use(cookieParser());
+app.use(morgan('dev'));
 
 /*
- * knex functions
+ * API
  **/
-
-// redditAPI.makeQuery('SELECT * FROM comments')
-//     .then(console.log);
-
-// redditAPI.knexTest().then(console.log)
-
-
-/*
- * Promise-based functions
- **/
-
 // redditAPI.createOrUpdateVote({
 //     postId:1,
 //     userId:2,
@@ -71,9 +84,9 @@ var redditAPI = reddit(knex);
 //     .then(console.log)
 //     .catch(console.log);
 
-redditAPI.getAllPosts({sortingMethod:'controversial'})
-    .then(console.log)
-    .catch(console.log);
+// redditAPI.getAllPosts({sortingMethod:'controversial'})
+//     .then(console.log)
+//     .catch(console.log);
 
 // redditAPI.createPost({
 //     userId: 1,
