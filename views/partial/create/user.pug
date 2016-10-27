@@ -1,0 +1,8 @@
+extends ../../layout/header
+block content
+    form(action="/create/user", method="POST")
+        div
+            input(type="text", name="username", placeholder="Enter your username")
+        div
+            input(type="password", name="password", placeholder="Enter a password")
+        button(type="submit") Create!

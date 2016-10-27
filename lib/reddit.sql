@@ -61,3 +61,11 @@ CREATE TABLE `votes` (
     FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
     FOREIGN KEY (`postId`) REFERENCES `posts` (`id`)
 );
+
+CREATE TABLE `sessions` (
+    `sessionId` VARCHAR(200) NOT NULL,
+    `userId` int(11) NOT NULL,
+    `createdAt` DATETIME NOT NULL,
+    PRIMARY KEY (`sessionId`, `userId`),
+    FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+)
