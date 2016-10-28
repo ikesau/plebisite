@@ -1,0 +1,13 @@
+extends ../../layout/header
+block content
+        div(id="contents")
+            ul(class="contents-list")
+                each post in posts
+                    div.post-container
+                        div.vote-container= post.totalVotes
+                        div.post-meta
+                            a.post-container__link(href=post.url)= post.title
+                            a [ replies ]
+                            p -#{post.user.username}
+            ul
+        div

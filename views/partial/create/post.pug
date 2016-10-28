@@ -1,8 +1,12 @@
 extends ../../layout/header
+block title
+    title Create a new post
 block content
-    form(action="/create/user", method="POST")
+    form(action="/create/post", method="POST")
         div
-            input(type="text", name="username", placeholder="Enter your username")
+            input(type="text", name="url", placeholder="Enter your link")
         div
-            input(type="password", name="password", placeholder="Enter a password")
+            input(type="password", name="title", placeholder="Describe your link")
+        div
+            input(type="password", name="title", placeholder="Describe your link")
         button(type="submit") Create!

@@ -1,4 +1,4 @@
-extends ../layout/header
+extends ../../layout/header
 block content
         div(id="contents")
             ul(class="contents-list")
@@ -7,6 +7,8 @@ block content
                         div.vote-container= post.totalVotes
                         div.post-meta
                             a.post-container__link(href=post.url)= post.title
-                            p submitted by #{post.user.username}
+                            a [ replies ]
+                            p -#{post.user.username}
+                            a(href=post.subredditUrl) #{post.subredditUrl}
             ul
         div

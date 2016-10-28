@@ -12,6 +12,7 @@ CREATE TABLE `users` (
 CREATE TABLE `subreddits` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(30),
+    `url` VARCHAR(30),
     `description` VARCHAR(200) DEFAULT NULL,
     `createdAt` DATETIME NOT NULL,
     `updatedAt` DATETIME NOT NULL,
@@ -68,4 +69,4 @@ CREATE TABLE `sessions` (
     `createdAt` DATETIME NOT NULL,
     PRIMARY KEY (`sessionId`, `userId`),
     FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
-)
+);

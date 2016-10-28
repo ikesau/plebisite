@@ -1,4 +1,6 @@
 extends ../layout/header
+block title
+    title Login to plebisite
 block content
     form(action="/login", method="POST")
         div
@@ -6,3 +8,6 @@ block content
         div
             input(type="password", name="password", placeholder="Enter a password")
         button(type="submit") Login.
+
+    p Don't have an account?
+    a(href='/create/user') Create one now!

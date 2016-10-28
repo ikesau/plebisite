@@ -1,4 +1,6 @@
 extends ../../layout/header
+block title
+    title Create an account
 block content
     form(action="/create/user", method="POST")
         div
@@ -6,3 +8,5 @@ block content
         div
             input(type="password", name="password", placeholder="Enter a password")
         button(type="submit") Create!
+    p Already have an account?
+    a(href='/login') Login now!

@@ -3,7 +3,18 @@ html
     head
         meta(charset="utf-8")
         link(rel="stylesheet", href="/assets/css/styles.css")
+        block title
+            title plebisite - the front page of localhost
     body
-        header.red
-            h1.site-header__title plebisite
+        header
+            div.header__title
+                a(href='/')
+                    h1.site-header__title plebisite
+            div.header__user-meta
+                if user
+                    p Hello, #{user.username}
+                    a(href='/create/post') [ create post ]
+                    a(href='/logout') [ logout ]
+                else
+                    a(href='/login') [ login ]
         block content

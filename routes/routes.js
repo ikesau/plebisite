@@ -9,18 +9,16 @@ var api = require('../api');
  * Initialization
  **/
 
-router.use(bodyParser.urlencoded({
-    extended: false
-}), cookieParser());
+router.use(
+    bodyParser.urlencoded({
+        extended: false
+    }),
+    cookieParser());
 
 /*
  * Middleware
  **/
 
-router.use(function(request, response, next) {
-    console.log("Visited");
-    next();
-});
 
 router.use(function(request, response, next) {
     if (request.cookies.session) {
@@ -30,7 +28,7 @@ router.use(function(request, response, next) {
                     next();
                 }
                 else { // Cookie matches a user
-                    request.user = result;
+                    request.user = result[0];
                     next();
                 }
             });
@@ -43,15 +41,21 @@ router.use(function(request, response, next) {
     }
 });
 
+router.use(function(request, response, next) {
+    console.log("Visited by:\n", request.user ? request.user : "Anonymous");
+    next();
+});
 /*
  * Get requests
  **/
 
 router.get('/', function(request, response, next) {
+    // request.user.currentSubreddit = null;
     api.getAllPosts()
         .then(posts => {
-            response.render('partial/posts', {
-                posts: posts
+            response.render('partial/posts/all', {
+                posts: posts,
+                user: request.user
             });
         });
 });
@@ -59,12 +63,36 @@ router.get('/', function(request, response, next) {
 router.get('/create/:type', function(request, response) {
     switch (request.params.type) {
         case 'post':
-            response.render('partial/create/post');
+            // console.log(request.user.currentSubreddit)
+
+            api.getAllSubreddits()
+                .then(subreddits => {
+                    response.render('partial/create/post', {
+                        user: request.user,
+                        subreddits: subreddits
+                    });
+                })
             break;
         case 'user':
-            response.render('partial/create/user');
+            response.render('partial/create/user', {
+                user: request.user
+            });
             break;
     }
+});
+
+router.get('/r/:subreddit', function(request, response) {
+    // request.user.currentSubreddit = request.params.subreddit;
+    console.log('Current subreddit is:', request.user.currentSubreddit);
+    api.getSubredditPosts({
+            subreddit: '/r/' + request.params.subreddit
+        })
+        .then(posts => {
+            response.render('partial/posts/subreddit', {
+                posts: posts,
+                user: request.user
+            })
+        })
 });
 
 router.get('/login', function(request, response, next) {
@@ -72,7 +100,9 @@ router.get('/login', function(request, response, next) {
         response.redirect('/');
     }
     else {
-        response.render('/partial/login');
+        response.render('partial/login', {
+            user: request.user
+        });
     }
 });
 
@@ -104,7 +134,9 @@ router.post('/create/user', function(request, response) {
                     })
                     .then(result => {
                         response.cookie('session', result.sessionId);
-                        response.redirect('/login');
+                        response.redirect('/login', {
+                            user: request.user
+                        });
                     });
             }
         });
@@ -112,11 +144,21 @@ router.post('/create/user', function(request, response) {
 
 router.post('/login', function(request, response) {
     api.verifyLogin(request.body.username, request.body.password)
-        .then(status => {
-            console.log(status);
+        .then(verification => {
+            if (verification.validLogin) {
+                api.createSession(verification.userId)
+                    .then(session => {
+                        response.cookie('session', session.sessionId);
+                        response.redirect('/');
+                    });
+            }
         })
         .catch(reason => {
-            response.status(400).send(reason);
+            console.log(new Date, "There was an error in verifyLogin: ", reason);
+            if (reason=="MismatchError: invalid") {
+                reason = new Error("your username and password do not match.");
+            }
+            response.status(400).send("Whoops, something went wrong.\n" + reason.toString());
         });
 });
 
