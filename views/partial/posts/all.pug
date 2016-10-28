@@ -5,10 +5,10 @@ block content
                 each post in posts
                     div.post-container
                         div.vote-container= post.totalVotes
-                        div.post-meta
-                            a.post-container__link(href=post.url)= post.title
-                            a [ replies ]
-                            p -#{post.user.username}
-                            a(href=post.subredditUrl) #{post.subredditUrl}
-            ul
-        div
+                        div.post
+                            a.post__link(href=post.url)= post.title
+                            div.post__meta
+                                a(href= post.subredditUrl + '/' + post.postId)
+                                    p [ replies ]
+                                p #{post.user.username}
+                                a(href=post.subredditUrl) #{post.subredditUrl}

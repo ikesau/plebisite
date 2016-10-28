@@ -42,6 +42,10 @@ header {
     color: #f9f9f9;
     font-family: sans-serif;
     font-size: 3rem;
+    transition: 200ms;
+}
+.header__title h1:hover {
+    color: #D0D0D0;
 }
 .header__title a {
     text-decoration: none;
@@ -75,17 +79,31 @@ header {
     flex-wrap: wrap;
 }
 
-.post-container__link {
+.post__link {
     width: 100%;
 }
 
 .vote-container {
     margin: 16px;
+    margin-right: 48px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #808080
 }
 
-.post-meta {
+.post__meta {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
 }
+.post {
+    margin: auto 0;
+}
 
+.subreddit-bar {
+    display: flex;
+    background: #F5F5F5;
+}
+.subreddit-bar a:not(:last-child)::after {
+    content: ' / ';
+}

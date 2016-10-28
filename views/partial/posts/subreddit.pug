@@ -7,7 +7,6 @@ block content
                         div.vote-container= post.totalVotes
                         div.post-meta
                             a.post-container__link(href=post.url)= post.title
-                            a [ replies ]
+                            a(href= post.subredditUrl + '/' + post.postId)
+                                p [ replies ]
                             p -#{post.user.username}
-            ul
-        div

@@ -20,6 +20,7 @@ router.use(
  **/
 
 
+
 router.use(function(request, response, next) {
     if (request.cookies.session) {
         api.getUserFromSession(request.cookies.session)
@@ -28,16 +29,17 @@ router.use(function(request, response, next) {
                     next();
                 }
                 else { // Cookie matches a user
-                    request.user = result[0];
+                    request.user = result[0] // for server access
+                    response.locals.user = result[0]; // for Pug access
                     next();
                 }
             });
     }
-    else {
+    else { // No cookie
         if (request.user) {
             delete request.user;
         }
-        next(); // No cookie
+        next();
     }
 });
 
@@ -45,6 +47,17 @@ router.use(function(request, response, next) {
     console.log("Visited by:\n", request.user ? request.user : "Anonymous");
     next();
 });
+
+router.use(function(request, response, next) {
+    api.getAllSubreddits()
+        .then(subreddits => {
+            response.locals.subreddits = subreddits.map(function(subreddit) {
+                return subreddit.subredditName.toLowerCase();
+            });
+            next();
+        });
+});
+
 /*
  * Get requests
  **/
@@ -55,7 +68,6 @@ router.get('/', function(request, response, next) {
         .then(posts => {
             response.render('partial/posts/all', {
                 posts: posts,
-                user: request.user
             });
         });
 });
@@ -63,46 +75,68 @@ router.get('/', function(request, response, next) {
 router.get('/create/:type', function(request, response) {
     switch (request.params.type) {
         case 'post':
-            // console.log(request.user.currentSubreddit)
 
             api.getAllSubreddits()
                 .then(subreddits => {
                     response.render('partial/create/post', {
-                        user: request.user,
                         subreddits: subreddits
                     });
-                })
-            break;
+                });
         case 'user':
-            response.render('partial/create/user', {
-                user: request.user
-            });
-            break;
+            response.render('partial/create/user');
     }
 });
 
 router.get('/r/:subreddit', function(request, response) {
-    // request.user.currentSubreddit = request.params.subreddit;
-    console.log('Current subreddit is:', request.user.currentSubreddit);
-    api.getSubredditPosts({
-            subreddit: '/r/' + request.params.subreddit
-        })
-        .then(posts => {
-            response.render('partial/posts/subreddit', {
-                posts: posts,
-                user: request.user
+    if (request.params.subreddit === 'random') {
+        api.getRandomSubreddit()
+            .then(randomSubreddit => {
+                response.redirect(randomSubreddit.subredditUrl)
             })
-        })
+    }
+    else {
+        api.getSubredditPosts({
+                subreddit: '/r/' + request.params.subreddit
+            })
+            .then(posts => {
+                response.render('partial/posts/subreddit', {
+                    posts: posts,
+                    subreddit: request.params.subreddit
+                });
+            });
+    }
 });
 
-router.get('/login', function(request, response, next) {
+router.get('/r/:subreddit/:post', function(request, response) {
+    api.getCommentsAndPostFromPostId(request.params.post)
+        .then(threadObject => {
+            response.render('partial/thread/linkPost', {
+                post: threadObject.OP[0],
+                comments: threadObject.comments,
+                subreddit: request.params.subreddit
+            });
+        });
+});
+
+router.get('/r/:subreddit/create/post', function(request, response) {
+    if (request.user) {
+        response.render('partial/create/subredditPost', {
+            subreddit: request.params.subreddit
+        });
+    }
+    else {
+        response.send("You must be logged in to create a post.");
+    }
+});
+
+router.get('/login', function(request, response) {
+    console.log("From the login get page, subreddits are: ", response.locals.subreddits);
+
     if (request.user) {
         response.redirect('/');
     }
     else {
-        response.render('partial/login', {
-            user: request.user
-        });
+        response.render('partial/login');
     }
 });
 
@@ -134,9 +168,7 @@ router.post('/create/user', function(request, response) {
                     })
                     .then(result => {
                         response.cookie('session', result.sessionId);
-                        response.redirect('/login', {
-                            user: request.user
-                        });
+                        response.redirect('/login');
                     });
             }
         });
@@ -155,10 +187,25 @@ router.post('/login', function(request, response) {
         })
         .catch(reason => {
             console.log(new Date, "There was an error in verifyLogin: ", reason);
-            if (reason=="MismatchError: invalid") {
+            if (reason == "MismatchError: invalid") {
                 reason = new Error("your username and password do not match.");
             }
             response.status(400).send("Whoops, something went wrong.\n" + reason.toString());
+        });
+});
+
+router.post('/r/:subreddit/create/post', function(request, response) {
+    api.getSubredditBy('name', request.params.subreddit)
+        .then(subredditObject => {
+            api.createPost({
+                    userId: request.user.id,
+                    title: request.body.title,
+                    url: request.body.url,
+                    subredditId: subredditObject.subredditId
+                })
+                .then(result => {
+                    response.redirect(`/r/${request.params.subreddit}`);
+                });
         });
 });
 

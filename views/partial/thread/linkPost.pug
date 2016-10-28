@@ -1,0 +1,16 @@
+extends ../../layout/header
+block content
+    div.OP
+        a(href=post.postUrl)
+            h2= post.postTitle
+    div.comments
+        each comment in comments.length ? comments : [{commentContent: 'There are no comments'}]
+            p= comment.commentContent
+                if comment.replies
+                    each reply in comment.replies 
+                        p= reply.commentContent
+                        if comment.replies
+                            each subreply in reply.replies 
+                                p= subreply.commentContent
+                    
+        
