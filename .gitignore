@@ -35,3 +35,6 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# css should be locally generated with '$ npm run build-css'
+assets/css

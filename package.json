@@ -17,8 +17,13 @@
     "moment": "^2.15.2",
     "morgan": "^1.7.0",
     "mysql": "^2.11.1",
+    "node-sass": "^3.11.1",
     "pug": "^2.0.0-beta6",
     "secure-random": "^1.1.1",
     "yarn": "^0.16.1"
+  },
+  "scripts": {
+    "build-css": "node-sass --include-path scss assets/scss/main.scss public/assets/css/styles.css",
+    "watch-css": "nodemon -e scss -x 'npm run build-css'"
   }
 }
