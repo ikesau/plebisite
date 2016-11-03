@@ -1,0 +1,29 @@
+.post {
+    margin: auto 0;
+}
+
+.post__meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.post__title {
+    text-decoration: none;
+    font-weight: 600;
+    
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.post__meta--posted-by {
+    margin: 16px 0;
+}
+
+.post__meta--replies {
+    text-decoration: none;
+    
+    &:hover {
+        text-decoration: underline;
+    }
+}

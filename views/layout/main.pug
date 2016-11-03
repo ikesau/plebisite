@@ -1,0 +1,35 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+
+        script(src="https://code.jquery.com/jquery-3.1.1.min.js", integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=", crossorigin="anonymous")
+        script(src="/assets/scripts/app.js")
+        link(rel="stylesheet", href="/assets/css/styles.css")
+        block title
+            title plebisite - the front page of localhost
+    body
+        nav.subreddit-bar
+            each subreddit in subreddits
+                a(href='/r/' + subreddit) #{subreddit}
+        nav.header
+            div.header__title
+                a(href='/')
+                    h1.site-header__title='plebisite'
+                if subreddit
+                    a(href='/r/'+subreddit)
+                        h1= '/r/' + subreddit
+            div.header__user-meta
+                if user
+                    p Hello, #{user.username}
+                    a(href='/r/random') [ random subreddit ]
+                    if subreddit
+                        a(href='/r/'+subreddit+'/create/post') [ create post ]
+                    else
+                        a(href='/create/post') [ create post ]
+                    a(href='/logout') [ logout ]
+                else
+                    a(href='/r/random') [ random subreddit ]
+                    a(href='/create/user') [ create account ]
+                    a(href='/login') [ login ]
+        block content

@@ -1,0 +1,18 @@
+.u-footer-push {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 80px);
+}
+
+.u-footer-push--form {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 80px);
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.u-centered {
+    text-align: center;
+}

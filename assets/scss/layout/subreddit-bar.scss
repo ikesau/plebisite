@@ -1,0 +1,16 @@
+.subreddit-bar {
+    display: flex;
+    background: #F5F5F5;
+    margin-left: 8px;
+}
+.subreddit-bar a:not(:last-child)::after {
+    content: '\00a0/\00a0';
+}
+
+.subreddit-bar a {
+    text-decoration: none;
+    
+        &:hover {
+            text-decoration: underline;
+        }
+}

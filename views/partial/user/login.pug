@@ -1,0 +1,11 @@
+extends ../../layout/main
+block title
+    title Login to plebisite
+block content
+    section.fixed-form__footer-push
+        div.fixed-form
+            form(action="/login", method="POST")
+                input.fixed-form__input--full-width(type="text", name="username", placeholder="Enter your username")
+                input.fixed-form__input--full-width(type="password", name="password", placeholder="Enter a password")
+                button.fixed-form__button(type="submit") Login
+            p.u-centered Don't have an account? #[a(href='/create/user') Create one now!]

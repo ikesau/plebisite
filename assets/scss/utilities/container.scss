@@ -1,0 +1,24 @@
+.container--post {
+    background-color: #f1f1f1;
+    border-bottom: 2px solid white;
+    padding: 32px;
+    display: flex;
+    flex-wrap: wrap;   
+}
+
+.container--vote {
+    margin: 16px;
+    margin-right: 48px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #808080    
+}
+
+.container--flex {
+    display: flex;
+}
+
+.container--flex-column {
+    display: flex;
+    flex-direction: column;
+}

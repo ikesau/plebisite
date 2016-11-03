@@ -1,0 +1,46 @@
+.header {
+    background-color: $red;
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header__title {
+    display: flex;
+    align-items: center;
+    margin-left: 16px;
+}
+
+.header__title h1 {
+    color: $cream;
+    font-family: sans-serif;
+    font-size: 3rem;
+    transition: 200ms;
+}
+.header__title h1:hover {
+    color: #D0D0D0;
+}
+.header__title a {
+    text-decoration: none;
+}
+
+.header__user-meta {
+    display: flex;
+    color: white;
+}
+
+.header__user-meta p {
+    margin: auto;
+    padding-right: 8px;
+}
+
+.header__user-meta a {
+    transition: 200ms;
+    color: #FFF;
+    text-decoration: none;
+    margin: auto 8px;
+}
+
+.header__user-meta a:hover {
+    color: $lightgrey;
+}
