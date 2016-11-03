@@ -1,12 +1,11 @@
-extends ../../layout/header
+extends ../../layout/main
 block title
     title Create an account
 block content
-    form(action="/create/user", method="POST")
-        div
-            input(type="text", name="username", placeholder="Enter your username")
-        div
-            input(type="password", name="password", placeholder="Enter a password")
-        button(type="submit") Create!
-    p Already have an account?
-    a(href='/login') Login now!
+    section.fixed-form__footer-push
+        div.fixed-form
+            form(action="/create/user", method="POST")
+                input.fixed-form__input--full-width(type="text", name="username", placeholder="Enter your username")
+                input.fixed-form__input--full-width(type="password", name="password", placeholder="Enter a password")
+                button.fixed-form__button(type="submit") Create
+            p.u-centered Already have an account? #[a(href='/login') Login now!]

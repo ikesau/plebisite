@@ -1,14 +1,14 @@
-extends ../../layout/header
+extends ../../layout/main
 block content
-        div(id="contents")
-            ul(class="contents-list")
+        section(class="contents")
                 each post in posts
-                    div.post-container
-                        div.vote-container= post.totalVotes
+                    article.container--post
+                        div.container--vote
+                            button.post__vote-button(data-postid=post.postId, data-value="1")  ^
+                            p.post__vote-value=post.totalVotes
+                            button.post__vote-button(data-postid=post.postId, data-value="-1") v
                         div.post
-                            a.post__link(href=post.url)= post.title
+                            a.post__title(href=post.url)= post.title
                             div.post__meta
-                                a(href= post.subredditUrl + '/' + post.postId)
-                                    p [ replies ]
-                                p #{post.user.username}
-                                a(href=post.subredditUrl) #{post.subredditUrl}
+                                p.post__meta--posted-by posted #{moment(post.createdAt).fromNow()} by #{post.user.username} to #[a(href=post.subredditUrl) #{post.subredditUrl}]
+                                a.post__meta--replies(href= post.subredditUrl + '/' + post.postId) [ replies ]

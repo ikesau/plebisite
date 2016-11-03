@@ -1,6 +1,7 @@
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
+var moment = require('moment');
 var express = require('express');
 var router = express.Router();
 var api = require('../api');
@@ -49,15 +50,18 @@ router.use(function(request, response, next) {
 });
 
 router.use(function(request, response, next) {
-    api.getAllSubreddits()
+    
+    response.locals.moment = moment; // adds momentJs functionality to pug templating
+    
+    api.getAllSubreddits() // provides an array of subreddits for pug
         .then(subreddits => {
             response.locals.subreddits = subreddits.map(function(subreddit) {
                 return subreddit.subredditName.toLowerCase();
             });
+
             next();
         });
 });
-
 /*
  * Get requests
  **/
@@ -136,7 +140,7 @@ router.get('/login', function(request, response) {
         response.redirect('/');
     }
     else {
-        response.render('partial/login');
+        response.render('partial/user/login');
     }
 });
 
@@ -206,6 +210,24 @@ router.post('/r/:subreddit/create/post', function(request, response) {
                 .then(result => {
                     response.redirect(`/r/${request.params.subreddit}`);
                 });
+        });
+});
+
+router.post('/vote', function(request, response) {
+    console.log(request.body);
+    console.log(request.user);
+    var vote = {
+        value: parseInt(request.body.value),
+        postId: parseInt(request.body.postId),
+        userId: request.user.id
+    }
+    
+    api.createOrUpdateVote(vote)
+        .then(result => {
+            console.log(new Date(), "There was a successful vote on the following post: ", result);
+        })
+        .catch(error => {
+            response.status(500).send("Something went wrong");
         });
 });
 
