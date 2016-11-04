@@ -12,6 +12,7 @@ html
         nav.subreddit-bar
             each subreddit in subreddits
                 a(href='/r/' + subreddit) #{subreddit}
+                | &nbsp;/&nbsp;
         nav.header
             div.header__title
                 a(href='/')

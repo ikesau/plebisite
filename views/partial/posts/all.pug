@@ -4,9 +4,13 @@ block content
                 each post in posts
                     article.container--post
                         div.container--vote
-                            button.post__vote-button(data-postid=post.postId, data-value="1")  ^
+                            if user
+                                button.post__vote-button(data-postid=post.postId, data-value="1")
+                                    i.fa.fa-arrow-up(class=(post.userVote === 1 ? 'active' : ''))
                             p.post__vote-value=post.totalVotes
-                            button.post__vote-button(data-postid=post.postId, data-value="-1") v
+                            if user
+                                button.post__vote-button(data-postid=post.postId, data-value="-1")
+                                    i.fa.fa-arrow-down(class=(post.userVote === -1 ? 'active' : ''))
                         div.post
                             a.post__title(href=post.url)= post.title
                             div.post__meta

@@ -50,9 +50,9 @@ router.use(function(request, response, next) {
 });
 
 router.use(function(request, response, next) {
-    
+
     response.locals.moment = moment; // adds momentJs functionality to pug templating
-    
+
     api.getAllSubreddits() // provides an array of subreddits for pug
         .then(subreddits => {
             response.locals.subreddits = subreddits.map(function(subreddit) {
@@ -67,25 +67,32 @@ router.use(function(request, response, next) {
  **/
 
 router.get('/', function(request, response, next) {
-    // request.user.currentSubreddit = null;
-    api.getAllPosts()
-        .then(posts => {
-            response.render('partial/posts/all', {
-                posts: posts,
+    if (!response.locals.user) {
+        api.getAllPosts()
+            .then(posts => {
+                response.render('partial/posts/all', {
+                    posts: posts,
+                });
             });
-        });
+    }
+    else {
+        api.getAllPosts({
+                userId: response.locals.user.id
+            })
+            .then(posts => {
+                response.render('partial/posts/all', {
+                    posts: posts,
+                });
+            });
+    }
 });
 
 router.get('/create/:type', function(request, response) {
+
     switch (request.params.type) {
         case 'post':
+            response.render('partial/create/post');
 
-            api.getAllSubreddits()
-                .then(subreddits => {
-                    response.render('partial/create/post', {
-                        subreddits: subreddits
-                    });
-                });
         case 'user':
             response.render('partial/create/user');
     }
@@ -221,7 +228,7 @@ router.post('/vote', function(request, response) {
         postId: parseInt(request.body.postId),
         userId: request.user.id
     }
-    
+
     api.createOrUpdateVote(vote)
         .then(result => {
             console.log(new Date(), "There was a successful vote on the following post: ", result);

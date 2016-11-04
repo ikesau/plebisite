@@ -59,7 +59,7 @@ module.exports = redditAPI;
 //     .then(console.log)
 //     .catch(console.log);
 
-// redditAPI.getAllPosts({sortingMethod:'controversial'})
+// redditAPI.getAllPosts()
 //     .then(console.log)
 //     .catch(console.log);
 
