@@ -1,0 +1,23 @@
+.OP {
+    padding: 32px;
+    border: 1px solid $lightgrey;
+    margin: 8px; 
+}
+
+.OP__title {
+    font-size: 1.7rem;
+    width: 100%;
+    padding-bottom: 16px;
+    display: inline-block;
+    border-bottom: 4px solid #f5f5f5;
+}
+
+.OP__meta {
+    display: flex;
+    padding-top: 16px;
+}
+
+.OP__reply-link {
+    padding-top: 16px;
+    display: inline-block;
+}

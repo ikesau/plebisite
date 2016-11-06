@@ -51,4 +51,16 @@ $(document).ready(function() {
 
     });
 
-})
+    $('.comment__reply-link').on('click', function(event) { // inline replying
+        event.preventDefault()
+
+        $(this).replaceWith(`
+        <form class="comment__reply-form" action="${$(event.currentTarget).attr('href')}" method="POST">
+            <input class="comment__reply-input" name="comment" type="text" placeholder="Write your reply"></input>
+            <button class="comment__reply-button" type="submit">Submit</button>
+            <button class="comment__cancel-button">Cancel</button>
+        </form>
+        `)
+    })
+
+});

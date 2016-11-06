@@ -95,6 +95,9 @@ router.get('/create/:type', function(request, response) {
 
         case 'user':
             response.render('partial/create/user');
+    
+        case 'subreddit':
+            response.render('partial/create/subreddit')
     }
 });
 
@@ -185,6 +188,22 @@ router.post('/create/user', function(request, response) {
         });
 });
 
+router.post('/create/subreddit', function(request, response) {
+    var subreddit = {
+        name: request.body.name,
+        description: request.body.description 
+    }
+    api.createSubredddit(subreddit)
+        .then(createdSubreddit => {
+            response.redirect(createdSubreddit.subredditUrl)
+        })
+        .catch(error => {
+            console.error("Something went wrong when someone tried to create a subreddit", error)
+            response.status(500).send("Whoops, something went wrong. Maybe the subreddit already exists? Maybe your input wasn't valid?")
+        })
+});
+
+
 router.post('/login', function(request, response) {
     api.verifyLogin(request.body.username, request.body.password)
         .then(verification => {
@@ -235,6 +254,21 @@ router.post('/vote', function(request, response) {
         })
         .catch(error => {
             response.status(500).send("Something went wrong");
+        });
+});
+
+router.post('/reply/r/:subreddit/:postId/:commentId', function(request, response) {
+    
+    var comment = {
+        content: request.body.comment,
+        userId: response.locals.user.id,
+        parentId: request.params.commentId,
+        postId: request.params.postId,
+    };
+    
+    api.createComment(comment)
+        .then(result => {
+            response.redirect(`/r/${request.params.subreddit}/${request.params.postId}`)
         });
 });
 

@@ -1,14 +1,33 @@
 extends ../../layout/main
 block content
-    div.OP
-        a(href=post.postUrl)
-            h2= post.postTitle
-    div.comments
+    article.OP
+        a.OP__title(href=post.postUrl) #{post.postTitle}
+        div.OP__meta
+            p.OP__username posted by  #{post.postUsername} #{moment(post.postCreatedAt).fromNow()}
+        if user    
+            a.OP__reply-link(href='/reply/'+post.postId) [ reply ]
+    section.comments
         each comment in comments.length ? comments : [{commentContent: 'There are no comments'}]
-            p= comment.commentContent
+            article.comment
+                div.comment__meta
+                    p.comment__username= comment.username
+                p.comment__content= comment.commentContent
+                if user && comment.commentContent != 'There are no comments'
+                    a.comment__reply-link(href='/reply/r/'+ subreddit + '/' + post.postId + '/' + comment.commentId) [ reply ]
                 if comment.replies
-                    each reply in comment.replies 
-                        p= reply.commentContent
-                        if comment.replies
-                            each subreply in reply.replies 
-                                p= subreply.commentContent
+                    if comment.replies.length
+                        div.replies
+                            each reply in comment.replies 
+                                article.comment
+                                    div.comment__meta
+                                        p.comment__username= reply.username
+                                    p.comment__content= reply.commentContent
+                                    if user
+                                        a.comment__reply-link(href='/reply/r/'+ subreddit + '/' + post.postId + '/' + reply.commentId) [ reply ]
+                                    if comment.replies.length
+                                        div.sub-replies
+                                            each subreply in reply.replies 
+                                                article.comment
+                                                    div.comment__meta
+                                                        p.comment__username= subreply.username
+                                                    p.comment__content= subreply.commentContent

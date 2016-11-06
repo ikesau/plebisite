@@ -13,6 +13,8 @@ html
             each subreddit in subreddits
                 a(href='/r/' + subreddit) #{subreddit}
                 | &nbsp;/&nbsp;
+                if user
+                    a(href='/create/subreddit') +
         nav.header
             div.header__title
                 a(href='/')

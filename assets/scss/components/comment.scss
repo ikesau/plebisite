@@ -1,0 +1,39 @@
+.comment {
+    background-color: rgba(200,200,200,0.2);
+    margin: 8px;
+    padding: 8px;
+    border: 1px solid $lightgrey;
+}
+
+.comment__meta {
+    // currently unused
+}
+
+.comment__username {
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+.comment__reply-link {
+    font-size: .8rem;
+}
+
+.comment__content {
+    margin: 8px;
+}
+
+.comment__reply-form {
+    display: flex;
+}
+
+.comment__reply-input {
+    width: 100%;
+}
+
+.comment__reply-button {
+    
+}
+
+.comment__cancel-button {
+    
+}
